@@ -1,22 +1,25 @@
 package arraylist;
 
+import java.util.Arrays;
+
 public class GenArraylist <E>{
-    private int size;
+    private int capacity;
     private int count;
     private E[] arrList;
     public GenArraylist(){
-        size = 10;
         count = 0;
-        arrList = (E[]) new Object[size];
+        capacity = 10;
+        arrList = (E[]) new Object[capacity];
     }
-    public GenArraylist(int setSize){
+    public GenArraylist(int setCapacity){
         count = 0;
-        size = setSize;
-        arrList = (E[]) new Object[setSize];
+        capacity = setCapacity;
+        arrList = (E[]) new Object[setCapacity];
     }
     public void add(E value){
-        if(count+1 == size){
-            throw new IndexOutOfBoundsException("Array full");
+        if(count+1 == capacity){
+            resize();
+            //ensureCapacity();
         }
         arrList[count] = value;
         count++;
@@ -28,7 +31,7 @@ public class GenArraylist <E>{
     }
 
     public boolean searchFor(E target){
-        for(int i = 0; i <= size-1; i++){
+        for(int i = 0; i <= capacity-1; i++){
             if(arrList[i] == target){
                 return true;
             }
@@ -36,8 +39,30 @@ public class GenArraylist <E>{
         return false;
     }
 
+    public void resize(){
+        E[] tempArray = (E[]) new Object[capacity];
+        System.arraycopy(arrList, 0, tempArray, 0, capacity);
+        capacity = capacity*2;
+        arrList= null;
+        arrList = (E[]) new Object[capacity];
+        System.arraycopy(tempArray,0,arrList,0,capacity/2);
+    }
+
+    public void ensureCapacity(){
+        int newCapacity = capacity*2;
+        arrList = Arrays.copyOf(arrList,newCapacity);
+    }
+
+    public int getSize(){
+        return capacity;
+    }
+
+    public int getCount(){
+        return count;
+    }
+
     public void printArr(){
-        for(int i = 0; i <= size-1; i++){
+        for(int i = 0; i <= capacity-1; i++){
             System.out.println("[" + arrList[i] + "]");
         }
     }
